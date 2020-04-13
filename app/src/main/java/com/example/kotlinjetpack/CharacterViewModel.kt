@@ -1,5 +1,6 @@
 package com.example.kotlinjetpack
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlinjetpack.data.Character
@@ -15,8 +16,11 @@ class CharacterViewModel : ViewModel() {
     private var isEnd:Boolean = false
     private var charList:MutableList<Character> = mutableListOf()
 
-    var characterLiveData: MutableLiveData<List<Character>> = MutableLiveData()
-    var isEndLiveData: MutableLiveData<Boolean> = MutableLiveData()
+    private val characterMutableLiveData: MutableLiveData<List<Character>> = MutableLiveData()
+    private val isEndMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
+
+    val characterLiveData: LiveData<List<Character>> = characterMutableLiveData
+    val isEndLiveData: LiveData<Boolean> = isEndMutableLiveData
 
     fun getCharacters() {
         if (!isEnd) {
@@ -27,18 +31,18 @@ class CharacterViewModel : ViewModel() {
                 .subscribe { response ->
                     if (response.first) {
                         isEnd = true
-                        isEndLiveData.value = response.first
+                        isEndMutableLiveData.value = response.first
                     } else {
                         page++
                     }
                     charList.addAll(response.second)
-                    characterLiveData.value = charList
+                    characterMutableLiveData.value = charList
                 })
         }
     }
 
     override fun onCleared() {
-        super.onCleared()
         disposable.clear()
+        super.onCleared()
     }
 }
