@@ -15,7 +15,7 @@ class CharacterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.character_main)
 
-        character = intent?.extras?.getParcelable(MainActivity().userIntent)
+        character = intent?.extras?.getParcelable(MainActivity.USER_INTENT)
 
         showUi()
     }

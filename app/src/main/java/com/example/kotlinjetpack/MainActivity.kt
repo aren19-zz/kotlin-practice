@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity(), CharacterAdapter.EndReachedCallback {
 
     private val adapter: CharacterAdapter = CharacterAdapter(this)
     private val disposable: CompositeDisposable = CompositeDisposable()
-    val userIntent = "User_Intent"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity(), CharacterAdapter.EndReachedCallback {
         disposable.add(adapter.getRowClickedObservable().observeOn(AndroidSchedulers.mainThread())
             .subscribe { character ->
                 val intent = Intent(this, CharacterActivity::class.java)
-                intent.putExtra(userIntent, character)
+                intent.putExtra(USER_INTENT, character)
                 startActivity(intent)
             })
     }
@@ -48,5 +47,9 @@ class MainActivity : AppCompatActivity(), CharacterAdapter.EndReachedCallback {
 
     override fun endReached() {
         viewModel.getCharacters()
+    }
+
+    companion object {
+        const val USER_INTENT = "USER_INTENT"
     }
 }
